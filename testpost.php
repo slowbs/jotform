@@ -7,7 +7,7 @@ $dbname = "jotform";
 
 $submission_id = $_POST['submission_id'];
 $formID = $_POST['formID'];
-$answers = $_POST['phonenumber']['1'];
+//$answers = $_POST['phonenumber']['1'];
 //$sliderImageDataArray = implode(" ",$_POST['phonenumber']);
 //echo $answers;
 /* $ip = $_POST['ip'];
@@ -15,11 +15,17 @@ $input3 = $_POST['input3']; */
 //echo $sliderImageDataArray;
 $str = '';
 $field_name = '';
+$field_name2 = '';
+$field_name3 = '';
 $field_value = '';
+$field_value2 = '';
+$field_value3 = '';
 $alter_field = '';
 $alter_field2 = '';
 $alter_field3 = '';
 $test = '';
+$insert = '';
+$update = '';
 
 //ใส่ชื่อ Table ตรงนี้
 $table_name = "`".$formID."`";
@@ -33,6 +39,8 @@ foreach ($_POST as $key => $value){
         $test .= "`" .$key . $i."` = '" .$value[$i]."', ";
         //$test .= $key . $i. " = " .$value[$i].", ";
         $alter_field2 .= "`" .$key. $i. "` VARCHAR (255), ";
+        $field_name2 .= "`" .$key. $i. "`, " ;
+        $field_value2 .= "'" .$value[$i]. "', " ;
         //echo $test;
         }
       }
@@ -48,7 +56,11 @@ foreach ($_POST as $key => $value){
 //echo $str;
 $alter_field3 = $alter_field . $alter_field2;
 //echo substr($alter_field3, 0, -2);
-$field_name2 = $str . $test;
+$update = $str . $test;
+$field_name3 = $field_name . $field_name2;
+$field_value3 = $field_value . $field_value2;
+//echo substr($field_value3, 0, -2);
+//echo $field_value2;
 //echo substr($field_name2, 0, -2);
     //echo substr($str, 0, -1);"
     //$string = "UPDATE " . $table_name . " SET " .substr($str, 0, -2). " where submission_id = '". $submission_id ."'";
@@ -93,7 +105,7 @@ try {
     //ตรวจสอบว่าเคยมีการ submit จาก submission_id นี้หรือไม่ ถ้ามี จะทำการอัพเดท record เดิม
     if ($stmt->rowCount() > 0) {
         //echo "1";
-        $string = "UPDATE " . $table_name . " SET " .substr($field_name2, 0, -2). " where submission_id = '". $submission_id ."'";
+        $string = "UPDATE " . $table_name . " SET " .substr($update, 0, -2). " where submission_id = '". $submission_id ."'";
         /* $sql = "UPDATE `table_name` SET name = '$input3', formID = '$formID', 
         ip = '$ip' where submission_id = '$submission_id'"
          or die(mysql_error()); */
@@ -107,7 +119,7 @@ try {
     //ถ้าไม่มี จะทำการ Insert record ใหม่
     } else {
         //echo "2";
-        $string = "INSERT INTO " .$table_name ." (". substr($field_name, 0, -2) . ") VALUES (" . substr($field_value, 0, -2) . ")" ;
+        $string = "INSERT INTO " .$table_name ." (". substr($field_name3, 0, -2) . ") VALUES (" . substr($field_value3, 0, -2) . ")" ;
         $sql = $string
         //$sql = "INSERT into `table_name` (submission_id, formID, ip, name/* , email, phonenumber13, subject7, message6 */) VALUES
         //('$submission_id','$formID','$ip')"
