@@ -29,9 +29,9 @@ foreach ($_POST as $key => $value){
       }
     else{
     //เก็บค่าลงในตัวแปร array
-    $str .= "`" .$key . '` = \'' . $value . '\', ';
+    $str .= "`" .$key . '` = \'' . htmlspecialchars($value, ENT_QUOTES) . '\', ';
     $field_name .= "`" .$key. "`, " ;
-    $field_value .= "'" .$value. "', " ;
+    $field_value .= "'" .htmlspecialchars($value, ENT_QUOTES). "', " ;
     $alter_field .= "`" .$key. "` VARCHAR (255), ";
     }
 }
