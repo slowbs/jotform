@@ -21,17 +21,17 @@ foreach ($_POST as $key => $value){
     if(is_array($value)) {
         $maxLength = count($value);
         for($i=0; $i<$maxLength; $i++){
-        $str2 .= "`" .$key . $i."` = '" .$value[$i]."', ";
+        $str2 .= "`" .$key . $i."` = '" .addslashes($value[$i])."', ";
         $alter_field2 .= "`" .$key. $i. "` VARCHAR (255), ";
         $field_name2 .= "`" .$key. $i. "`, " ;
-        $field_value2 .= "'" .$value[$i]. "', " ;
+        $field_value2 .= "'" .addslashes($value[$i]). "', " ;
         }
       }
     else{
     //เก็บค่าลงในตัวแปร array
-    $str .= "`" .$key . '` = \'' . htmlspecialchars($value, ENT_QUOTES) . '\', ';
+    $str .= "`" .$key . '` = \'' . addslashes($value) . '\', ';
     $field_name .= "`" .$key. "`, " ;
-    $field_value .= "'" .htmlspecialchars($value, ENT_QUOTES). "', " ;
+    $field_value .= "'" .addslashes($value). "', " ;
     $alter_field .= "`" .$key. "` VARCHAR (255), ";
     }
 }
