@@ -1,4 +1,6 @@
 <?php
+//ปิด error ของ php
+error_reporting(0);
 
 $servername = "localhost";
 $username = "slowbs";
@@ -33,12 +35,13 @@ foreach ($_POST as $key => $value){
     $alter_field .= "`" .$key. "` VARCHAR (255), ";
     }
 }
-$alter_field3 = $alter_field . $alter_field2;
+$alter_field3 = $alter_field . $alter_field2 ."date DATETIME NOT NULL";
+//echo $field_name3;
 //ลองแสดงค่าโดยตัด 2 ตัวสุดท้ายออก
 //echo substr($alter_field3, 0, -2);
-$update = $str . $str2;
-$field_name3 = $field_name . $field_name2;
-$field_value3 = $field_value . $field_value2;
+$update = $str . $str2 . "`date` = NOW()";
+$field_name3 = $field_name . $field_name2 . "`date`";
+$field_value3 = $field_value . $field_value2 ."NOW()";
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname;charset=utf8", $username, $password);
@@ -55,7 +58,8 @@ try {
     if ($stmt->rowCount() < 1){
         $cretable = "CREATE TABLE " .$table_name. 
         " (id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, ".
-        substr($alter_field3, 0, -2) .");
+        //substr($alter_field3, 0, -2) .");
+        $alter_field3 .");
         INSERT INTO form_list (formID) VALUES ('$formID')";
         $sql = $cretable;
     // use exec() because no results are returned
@@ -67,7 +71,7 @@ try {
     $stmt->execute();
     //ตรวจสอบว่าเคยมีการ submit จาก submission_id นี้หรือไม่ ถ้ามี จะทำการอัพเดท record เดิม
     if ($stmt->rowCount() > 0) {
-        $string = "UPDATE " . $table_name . " SET " .substr($update, 0, -2). " where submission_id = '". $submission_id ."'";
+        $string = "UPDATE " . $table_name . " SET " .$update. " where submission_id = '". $submission_id ."'";
          $sql = $string
          or die(mysql_error());
          $stmt = $conn->prepare($sql);
@@ -77,7 +81,7 @@ try {
     //ถ้าไม่มี จะทำการ Insert record ใหม่
     } else 
     {
-        $string = "INSERT INTO " .$table_name ." (". substr($field_name3, 0, -2) . ") VALUES (" . substr($field_value3, 0, -2) . ")" ;
+        $string = "INSERT INTO " .$table_name ." (". $field_name3 . ") VALUES (" . $field_value3 . ")" ;
         $sql = $string
         or die(mysql_error());
         $stmt = $conn->prepare($sql);
@@ -87,6 +91,7 @@ try {
 }
 catch(PDOException $e)
     {
+    //ปิด error ของ pdo    
     echo $sql . "<br>" . $e->getMessage();
     }
 
