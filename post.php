@@ -77,9 +77,8 @@ try {
          $stmt = $conn->prepare($sql);
         $stmt->execute();
         echo $stmt->rowCount() . " records UPDATED successfully";
-    
-    //ถ้าไม่มี จะทำการ Insert record ใหม่
-    } else 
+    } else
+    //ถ้าไม่มี จะทำการ Insert record ใหม่ 
     {
         $string = "INSERT INTO " .$table_name ." (". $field_name3 . ") VALUES (" . $field_value3 . ")" ;
         $sql = $string
